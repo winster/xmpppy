@@ -20,6 +20,7 @@ def random_id():
   return rid
 
 def message_callback(session, message):
+  print "inside upstream message"
   global unacked_messages_quota
   gcm = message.getTags('gcm')
   if gcm:
@@ -40,6 +41,7 @@ def message_callback(session, message):
       unacked_messages_quota += 1
 
 def send(json_dict):
+  print "inside sending downstream message"
   template = ("<message><gcm xmlns='google:mobile:data'>{1}</gcm></message>")
   client.send(xmpp.protocol.Message(
       node=template.format(client.Bind.bound[0], json.dumps(json_dict))))
@@ -47,17 +49,20 @@ def send(json_dict):
 def flush_queued_messages():
   global unacked_messages_quota
   while len(send_queue) and unacked_messages_quota > 0:
+    print "flushing queued messages"
     send(send_queue.pop(0))
     unacked_messages_quota -= 1
 
-client = xmpp.Client('gcm.googleapis.com', debug=['socket'])
+client = xmpp.Client('gcm.googleapis.com')
 client.connect(server=(SERVER,PORT), secure=1, use_srv=False)
 auth = client.auth(USERNAME, PASSWORD)
 if not auth:
   print 'Authentication failed!'
   sys.exit(1)
 
+print "auth success"
 client.RegisterHandler('message', message_callback)
+print "registered handler"
 
 send_queue.append({'to': REGISTRATION_ID,
                    'message_id': 'reg_id',
