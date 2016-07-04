@@ -1,0 +1,1 @@
+https://github.com/ArchipelProject/xmpppy/archive/master.zip
