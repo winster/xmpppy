@@ -69,9 +69,9 @@ send_queue.append({'to': REGISTRATION_ID,
                    'data': {'message_destination': 'RegId',
                             'message_id': random_id()}})
 
-while True:
-  client.Process(1)
-  flush_queued_messages()
+#while True:
+#  client.Process(1)
+#  flush_queued_messages()
 
 @app.route('/')
 def root():
