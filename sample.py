@@ -1,5 +1,8 @@
 #!/usr/bin/python
 import sys, json, xmpp, random, string
+from flask import Flask, make_response, jsonify
+
+app = Flask(__name__)
 
 SERVER = 'gcm.googleapis.com'
 PORT = 5236
@@ -64,3 +67,7 @@ send_queue.append({'to': REGISTRATION_ID,
 while True:
   client.Process(1)
   flush_queued_messages()
+
+@app.route('/')
+def root():
+    return make_response(jsonify({'result': 'success'}), 200)
