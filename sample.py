@@ -76,3 +76,6 @@ send_queue.append({'to': REGISTRATION_ID,
 @app.route('/')
 def root():
     return make_response(jsonify({'result': 'success'}), 200)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=8080)
